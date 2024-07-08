@@ -23,7 +23,7 @@ RUN apt-get install software-properties-common -y
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 RUN apt-get install python3-venv -y
-RUN pip3 install pyyaml
+RUN apt-get install python3-yaml -y
 
 # Setup User
 ENV TZ="US/Eastern"

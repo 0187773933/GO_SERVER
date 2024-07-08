@@ -17,8 +17,11 @@ except KeyError:
 ")
 	echo "$value"
 }
-
 APP_NAME=$(get_yaml_value "docker.name")
+# get_yaml_value() {
+# 	local key=$1
+# 	grep "$key:" "../SAVE_FILES/config.yaml" | awk -F ': ' '{print $2}' | tr -d '"'
+# }
 # APP_NAME=$(<../SAVE_FILES/Docker.name)
 # APP_NAME=$(get_yaml_value "docker_name")
-sudo docker exec -it $(<../SAVE_FILES/Docker.name) bash
+sudo docker exec -it "$APP_NAME" bash

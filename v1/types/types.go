@@ -36,6 +36,8 @@ type Git struct {
 
 type Go struct {
 	Version string `yaml:"version"`
+	OS string `yaml:"os"`
+	Arch string `yaml:"arch"`
 }
 
 type Bolt struct {

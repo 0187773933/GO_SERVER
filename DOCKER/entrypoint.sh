@@ -2,7 +2,7 @@
 
 get_yaml_value() {
 	local key_path=$1
-	local yaml_file="../SAVE_FILES/config.yaml"
+	local yaml_file="/home/morphs/SAVE_FILES/config.yaml"
 	local value=$(python3 -c "
 import sys, yaml
 with open('$yaml_file', 'r') as file:
@@ -20,6 +20,8 @@ except KeyError:
 }
 
 GIT_URL=$(get_yaml_value "git.url")
+GOOS=$(get_yaml_value "go.os")
+GOARCH=$(get_yaml_value "go.arch")
 HASH_FILE="/home/morphs/git.hash"
 REMOTE_HASH=$(git ls-remote "$GIT_URL" HEAD | awk '{print $1}')
 BUILD_PATH="/home/morphs/DockerBuild"
@@ -38,12 +40,12 @@ if [ "$REMOTE_HASH" == "$STORED_HASH" ]; then
 else
 	echo "New updates available. Updating and Rebuilding Go Module"
 	echo "$REMOTE_HASH" | sudo tee "$HASH_FILE"
-	cd "~"
+	cd "/home/morphs"
 	sudo rm -rf "$BUILD_PATH"
-	git clone "$GIT_URL"
+	git clone "$GIT_URL" "$BUILD_PATH"
 	sudo chown -R morphs:morphs "$BUILD_PATH"
 	cd "$BUILD_PATH"
 	/usr/local/go/bin/go mod tidy
-	GOOS=linux GOARCH=amd64 /usr/local/go/bin/go build -o "$EXEC_PATH"
+	GOOS="$GOOS" GOARCH="$GOARCH" /usr/local/go/bin/go build -o "$EXEC_PATH"
 	exec "$EXEC_PATH" "$@"
 fi

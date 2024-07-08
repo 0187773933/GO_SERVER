@@ -1,29 +1,44 @@
-=name: "Example Server"
-local_url: "http://localhost"
-private_url: "http://192.168.4.23"
-# public_url: "https://6105buttons3.olahmb.com"
-public_url: "http://192.168.4.23"
-port: "6996"
-api_key: "asdf"
-login_url_prefix: "asdf"
-url_prefix: "asdf"
-cookie_name: "example-server"
-cookie_secret: "asdf"
-cookie_secret_message: "why"
-cookie_admin_name: "example-server-admin"
-cookie_admin_secret: "asdf"
-cookie_admin_secret_message: "why"
-allow_origins_string: ""
-admin_username: "asdf"
-admin_password: "asdf"
-time_zone: "America/New_York"
+name: "Example Server"
+port: "1234"
+urls:
+  local: "http://localhost"
+  private: "http://192.168.4.23"
+  public: "http://192.168.4.23"
+  admin_login: "asdf"
+  admin_prefix: "asdf"
+  login: ""
+  prefix: ""
+cookie:
+  secret: "asdf="
+  user:
+    name: "example-server"
+    message: "why"
+  admin:
+    name: "example-server-admin"
+    message: "why"
+creds:
+  admin_username: "asdf"
+  admin_password: "asdf"
+  api_key: "asdf"
+  encryption_key: "asdf"
+allow_origins:
+  -
 # save_files_path: "/home/morphs/SAVE_FILES"
-save_files_path: "/Users/morpheous/WORKSPACE/GO/EXAMPLE_SERVER/SAVE_FILES"
-bolt_db_path: "bolt.db"
-encryption_key: "asdf"
-log_level: "debug"
-log_key: asdf
-docker_name: "private-example-server"
-git_url: "https://github.com/EXAMPLE_USER/EXAMPLE_SERVER.git"
-git_ssh_url: "git@github.com:EXAMPLE_USER/EXAMPLE_SERVER.git"
-go_version: "1.22.0"
+save_files_path: "/Users/morpheous/WORKSPACE/GO/BLANK_SERVER/SAVE_FILES"
+bolt:
+  path: "/Users/morpheous/WORKSPACE/GO/BLANK_SERVER/SAVE_FILES/bolt.db"
+docker:
+  name: "private-example-server"
+git:
+  url: "https://github.com/0187773933/BLANK_SERVER.git"
+  ssh_url: "git@github.com:0187773933/BLANK_SERVER.git"
+go:
+  version: "1.22.2"
+  os: "linux"
+  arch: "amd64"
+log:
+  time_zone: "America/New_York"
+  log_key: "asdf"
+  log_level: "debug"
+  bolt_db_path: "/Users/morpheous/WORKSPACE/GO/BLANK_SERVER/SAVE_FILES/log.db"
+  encryption_key: "asdf"

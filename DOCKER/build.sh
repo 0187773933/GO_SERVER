@@ -1,8 +1,4 @@
 #!/bin/bash
-# get_yaml_value() {
-# 	local key=$1
-# 	grep "$key:" "../SAVE_FILES/config.yaml" | awk -F ': ' '{print $2}' | tr -d '"'
-# }
 get_yaml_value() {
 	local key_path=$1
 	local yaml_file="../SAVE_FILES/config.yaml"
