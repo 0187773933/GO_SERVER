@@ -66,7 +66,7 @@ func ( s *Server ) Start() {
 		fmt.Printf( "Listening @ http://%s:%s\n" , ip_address , s.Config.Port )
 	}
 	listen_address := fmt.Sprintf( ":%s" , s.Config.Port )
-	log.Info( "Ready" )
+	log.Info( fmt.Sprintf( "%s Ready" , s.Config.Name ) )
 	s.FiberApp.Listen( listen_address )
 }
 
