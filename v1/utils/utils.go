@@ -14,6 +14,8 @@ import (
 	encryption "github.com/0187773933/encryption/v1/encryption"
 )
 
+var CONFIG_PATH string = ""
+
 func SetupStackTraceReport() {
 	if r := recover(); r != nil {
 		stacktrace := make( []byte , 1024 )
@@ -63,6 +65,35 @@ func GenerateNewKeys() {
 	panic( "Exiting" )
 }
 
+func WriteConfig( config types.Config ) {
+	config_file , _ := yaml.Marshal( &config )
+	ioutil.WriteFile( CONFIG_PATH , config_file , 0644 )
+}
+
+func GenerateNewKeysWrite( config *types.Config ) {
+	x := config
+	x.URLS.AdminLogin = encryption.GenerateRandomString( 16 )
+	x.URLS.AdminPrefix = encryption.GenerateRandomString( 6 )
+	x.URLS.Login = encryption.GenerateRandomString( 16 )
+	x.URLS.Prefix = encryption.GenerateRandomString( 6 )
+	cookie_secret_bytes := encryption.GenerateRandomBytes( 32 )
+	x.Cookie.Secret = base64.StdEncoding.EncodeToString( cookie_secret_bytes )
+	x.Cookie.User.Message = encryption.GenerateRandomString( 16 )
+	x.Cookie.Admin.Message = encryption.GenerateRandomString( 16 )
+	x.Creds.AdminUsername = encryption.GenerateRandomString( 16 )
+	x.Creds.AdminPassword = encryption.GenerateRandomString( 16 )
+	x.Creds.APIKey = encryption.GenerateRandomString( 16 )
+	x.Creds.EncryptionKey = encryption.GenerateRandomString( 32 )
+	x.Bolt.Prefix = encryption.GenerateRandomString( 6 )
+	x.Redis.Prefix = encryption.GenerateRandomString( 6 )
+	x.Log.LogKey = encryption.GenerateRandomString( 6 )
+	x.Log.EncryptionKey = encryption.GenerateRandomString( 32 )
+	fmt.Println( x )
+	fmt.Println( CONFIG_PATH )
+	WriteConfig( *x )
+	panic( "Exiting" )
+}
+
 func GetLocalIPAddresses() ( ip_addresses []string ) {
 	host , _ := os.Hostname()
 	addrs , _ := net.LookupIP( host )
@@ -87,15 +118,14 @@ func ParseConfig( file_path string ) ( result types.Config ) {
 }
 
 func GetConfig() ( result types.Config ) {
-	var config_file_path string
 	if len( os.Args ) > 1 {
-		config_file_path , _ = filepath.Abs( os.Args[ 1 ] )
+		CONFIG_PATH , _ = filepath.Abs( os.Args[ 1 ] )
 	} else {
-		config_file_path , _ = filepath.Abs( "./SAVE_FILES/config.yaml" )
-		if _ , err := os.Stat( config_file_path ); os.IsNotExist( err ) {
+		CONFIG_PATH , _ = filepath.Abs( "./SAVE_FILES/config.yaml" )
+		if _ , err := os.Stat( CONFIG_PATH ); os.IsNotExist( err ) {
 			panic( "Config File Not Found" )
 		}
 	}
-	result = ParseConfig( config_file_path )
+	result = ParseConfig( CONFIG_PATH )
 	return
 }

@@ -29,9 +29,10 @@ func SetupCloseHandler() {
 }
 
 func main() {
+	config := utils.GetConfig()
+	// utils.GenerateNewKeysWrite( &config )
 	// utils.GenerateNewKeys()
 	defer utils.SetupStackTraceReport()
-	config := utils.GetConfig()
 	logger.New( &config.Log )
 	DB , _ = bolt.Open( config.Bolt.Path , 0600 , &bolt.Options{ Timeout: ( 3 * time.Second ) } )
 	s = server.New( &config , logger.Log , DB )
