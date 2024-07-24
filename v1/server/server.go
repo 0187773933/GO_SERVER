@@ -21,6 +21,7 @@ type Server struct {
 	Config *types.Config `yaml:"config"`
 	Location *time.Location `yaml:"-"`
 	DB *bolt.DB `yaml:"-"`
+	LOG *logger.Wrapper `yaml:"-"`
 }
 
 var log *logger.Wrapper
@@ -75,6 +76,7 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	server.FiberApp = fiber.New()
 	server.Config = config
 	log = w_log
+	server.LOG = w_log
 	server.DB = db
 	server.FiberApp.Use( server.LogRequest )
 	server.FiberApp.Use( fiber_favicon.New() )

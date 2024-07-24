@@ -29,26 +29,26 @@ func ( s *Server ) GetLogMessages( c *fiber.Ctx ) ( error ) {
 	})
 }
 
-func ( s *Server ) ExampleGet( c *fiber.Ctx ) ( error ) {
-	id := c.Params( "id" )
-	extra := c.Query( "extra" )
-	return c.JSON( fiber.Map{
-		"result": true ,
-		"url": "/example/:id" ,
-		"id": id ,
-		"extra": extra ,
-	})
-}
+// func ( s *Server ) ExampleGet( c *fiber.Ctx ) ( error ) {
+// 	id := c.Params( "id" )
+// 	extra := c.Query( "extra" )
+// 	return c.JSON( fiber.Map{
+// 		"result": true ,
+// 		"url": "/example/:id" ,
+// 		"id": id ,
+// 		"extra": extra ,
+// 	})
+// }
 
-func ( s *Server ) ExamplePost( c *fiber.Ctx ) ( error ) {
-	var json_body map[ string ]interface{}
-	c.BodyParser( &json_body )
-	return c.JSON( fiber.Map{
-		"result": true ,
-		"url": "/example/:id" ,
-		"data": json_body ,
-	})
-}
+// func ( s *Server ) ExamplePost( c *fiber.Ctx ) ( error ) {
+// 	var json_body map[ string ]interface{}
+// 	c.BodyParser( &json_body )
+// 	return c.JSON( fiber.Map{
+// 		"result": true ,
+// 		"url": "/example/:id" ,
+// 		"data": json_body ,
+// 	})
+// }
 
 func ( s *Server ) SetupAdminRoutes() {
 	cdn_group := s.FiberApp.Group( "/cdn" )
@@ -63,6 +63,6 @@ func ( s *Server ) SetupAdminRoutes() {
 	}
 	admin.Use( s.ValidateAdminMW )
 	admin.Get( "/log/view" , s.GetLogMessages )
-	admin.Get( "/example/:id" , s.ExampleGet )
-	admin.Post( "/example" , s.ExamplePost )
+	// admin.Get( "/example/:id" , s.ExampleGet )
+	// admin.Post( "/example" , s.ExamplePost )
 }
