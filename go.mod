@@ -1,4 +1,4 @@
-module github.com/0187773933/BLANK_SERVER
+module github.com/0187773933/GO_SERVER
 
 go 1.22.2
 

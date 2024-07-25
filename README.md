@@ -1,1 +1,1 @@
-# Example Server
+# Template GO Server

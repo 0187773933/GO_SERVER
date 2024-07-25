@@ -1,13 +1,26 @@
 package server
 
 import (
+	"io/fs"
+	"net/http"
 	// "fmt"
 	// "time"
 	// "strings"
 	"encoding/json"
 	bolt "github.com/boltdb/bolt"
-	// fiber "github.com/gofiber/fiber/v2"
+	fiber "github.com/gofiber/fiber/v2"
+	fasthttpadaptor "github.com/valyala/fasthttp/fasthttpadaptor"
 )
+
+// Custom static file handler for embedded files
+func ( s *Server ) StaticHandler( prefix string , fsys fs.FS ) fiber.Handler {
+	file_server := http.StripPrefix( prefix , http.FileServer( http.FS( fsys ) ) )
+	request_handler := fasthttpadaptor.NewFastHTTPHandler( file_server )
+	return func( c *fiber.Ctx ) error {
+		request_handler( c.Context() )
+		return nil
+	}
+}
 
 func ( s *Server ) Set( bucket_name string , key string , value string ) {
 	s.DB.Update( func( tx *bolt.Tx ) error {

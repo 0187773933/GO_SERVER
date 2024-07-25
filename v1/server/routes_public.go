@@ -1,8 +1,10 @@
 package server
 
 import (
+	// "embed"
 	"fmt"
 	"time"
+	// "io/fs"
 	// "strings"
 	fiber "github.com/gofiber/fiber/v2"
 	rate_limiter "github.com/gofiber/fiber/v2/middleware/limiter"
@@ -51,10 +53,10 @@ func ( s *Server ) RenderHomePage( context *fiber.Ctx ) ( error ) {
 	context.Set( "Content-Type" , "text/html" )
 	admin_logged_in := s.ValidateAdmin( context )
 	if admin_logged_in == true {
-		// fmt.Println( "RenderHomePage() --> Admin" )
-		return context.SendFile( "./v1/server/html/admin.html" )
+		return context.SendStream( ADMIN_HTML_FILE , ADMIN_HTML_FILE_SIZE )
+	} else {
+		return context.SendStream( HOME_HTML_FILE , HOME_HTML_FILE_SIZE )
 	}
-	return context.SendFile( "./v1/server/html/home.html" )
 }
 
 func ( s *Server ) SetupPublicRoutes() {
@@ -76,6 +78,7 @@ func ( s *Server ) SetupPublicRoutes() {
 		}
 		admin_logout_url = fmt.Sprintf( "/%s/logout" , s.Config.URLS.AdminPrefix )
 	}
+	fmt.Println( home_url )
 	s.FiberApp.Get( home_url , PublicLimter , s.RenderHomePage )
 	// s.FiberApp.Get( login_url , PublicLimter , s.LoginPage )
 	// s.FiberApp.Post( login_url , PublicLimter , s.Login )

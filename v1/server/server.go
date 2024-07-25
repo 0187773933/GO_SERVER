@@ -1,20 +1,39 @@
 package server
 
 import (
+	"embed"
 	"fmt"
+	fs "io/fs"
 	"time"
 	"strings"
 	bolt "github.com/boltdb/bolt"
 	// logrus "github.com/sirupsen/logrus"
 	logger "github.com/0187773933/Logger/v1/logger"
-	types "github.com/0187773933/BLANK_SERVER/v1/types"
-	utils "github.com/0187773933/BLANK_SERVER/v1/utils"
+	types "github.com/0187773933/GO_SERVER/v1/types"
+	utils "github.com/0187773933/GO_SERVER/v1/utils"
 	fiber "github.com/gofiber/fiber/v2"
 	fiber_cookie "github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	fiber_cors "github.com/gofiber/fiber/v2/middleware/cors"
 	fiber_favicon "github.com/gofiber/fiber/v2/middleware/favicon"
 	// bolt "github.com/boltdb/bolt"
 )
+
+//go:embed cdn/*
+var CDNFiles embed.FS
+
+//go:embed html/*
+var HTMLFiles embed.FS
+
+var CDNFilesFS fs.FS
+var HTMLFilesFS fs.FS
+
+var ADMIN_HTML_FILE fs.File
+var HOME_HTML_FILE fs.File
+var LOGIN_HTML_FILE fs.File
+
+var ADMIN_HTML_FILE_SIZE int
+var HOME_HTML_FILE_SIZE int
+var LOGIN_HTML_FILE_SIZE int
 
 type Server struct {
 	FiberApp *fiber.App `yaml:"fiber_app"`
@@ -88,6 +107,22 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 		AllowOrigins: allow_origins_string ,
 		AllowHeaders:  "Origin, Content-Type, Accept, key, k" ,
 	}))
+
+	CDNFilesFS , _ = fs.Sub( CDNFiles , "cdn" )
+	HTMLFilesFS , _ = fs.Sub( HTMLFiles , "html" )
+	ADMIN_HTML_FILE , _ = HTMLFilesFS.Open( "admin.html" )
+	HOME_HTML_FILE , _ = HTMLFilesFS.Open( "home.html" )
+	LOGIN_HTML_FILE , _ = HTMLFilesFS.Open( "login.html" )
+	defer ADMIN_HTML_FILE.Close()
+	defer HOME_HTML_FILE.Close()
+	defer LOGIN_HTML_FILE.Close()
+	ADMIN_HTML_FILE_INFO , _ := ADMIN_HTML_FILE.Stat()
+	HOME_HTML_FILE_INFO , _ := HOME_HTML_FILE.Stat()
+	LOGIN_HTML_FILE_INFO , _ := LOGIN_HTML_FILE.Stat()
+	ADMIN_HTML_FILE_SIZE = int( ADMIN_HTML_FILE_INFO.Size() )
+	HOME_HTML_FILE_SIZE = int( HOME_HTML_FILE_INFO.Size() )
+	LOGIN_HTML_FILE_SIZE = int( LOGIN_HTML_FILE_INFO.Size() )
+
 	server.SetupPublicRoutes()
 	server.SetupAdminRoutes()
 	return

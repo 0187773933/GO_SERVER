@@ -9,7 +9,7 @@ import (
 	yaml "gopkg.in/yaml.v3"
 	ioutil "io/ioutil"
 	runtime "runtime"
-	types "github.com/0187773933/BLANK_SERVER/v1/types"
+	types "github.com/0187773933/GO_SERVER/v1/types"
 	// fiber_cookie "github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	encryption "github.com/0187773933/encryption/v1/encryption"
 )

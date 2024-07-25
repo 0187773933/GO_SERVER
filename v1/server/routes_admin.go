@@ -3,6 +3,8 @@ package server
 import (
 	"fmt"
 	"strconv"
+	// "io/fs"
+	// "net/http"
 	// net_url "net/url"
 	// bolt_api "github.com/boltdb/bolt"
 	// encryption "github.com/0187773933/encryption/v1/encryption"
@@ -50,11 +52,13 @@ func ( s *Server ) GetLogMessages( c *fiber.Ctx ) ( error ) {
 // 	})
 // }
 
+
 func ( s *Server ) SetupAdminRoutes() {
 	cdn_group := s.FiberApp.Group( "/cdn" )
 	cdn_group.Use( CDNLimter )
 	cdn_group.Use( s.ValidateAdminMW )
-	s.FiberApp.Static( "/cdn" , "./v1/server/cdn" )
+	// s.FiberApp.Static( "/cdn" , cdn_fs )
+	cdn_group.Use( "/" , s.StaticHandler( "/cdn" , CDNFilesFS ) )
 	var admin fiber.Router
 	if s.Config.URLS.AdminPrefix == "" {
 		admin = s.FiberApp.Group( "/admin" )

@@ -7,8 +7,8 @@ import (
 	"time"
 	bolt "github.com/boltdb/bolt"
 	logger "github.com/0187773933/Logger/v1/logger"
-	utils "github.com/0187773933/BLANK_SERVER/v1/utils"
-	server "github.com/0187773933/BLANK_SERVER/v1/server"
+	utils "github.com/0187773933/GO_SERVER/v1/utils"
+	server "github.com/0187773933/GO_SERVER/v1/server"
 )
 
 var s server.Server
