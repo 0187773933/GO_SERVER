@@ -121,5 +121,6 @@ func ( s *Server ) RenderFailedLogin( context *fiber.Ctx ) ( error ) {
 
 func ( s *Server ) LoginPage( context *fiber.Ctx ) ( error ) {
 	context.Set( "Content-Type" , "text/html" )
-	return context.SendFile( "./v1/server/html/login.html" )
+	// return context.SendFile( "./v1/server/html/login.html" )
+	return context.SendStream( LOGIN_HTML_FILE , LOGIN_HTML_FILE_SIZE )
 }
