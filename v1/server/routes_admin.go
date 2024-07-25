@@ -31,19 +31,19 @@ func ( s *Server ) GetLogMessages( c *fiber.Ctx ) ( error ) {
 	})
 }
 
-func ( s *Server ) ExampleGet( c *fiber.Ctx ) ( error ) {
-	server.REDIS.Set( "example-asdf" , "example-asdf" , 0 )
-	test := server.REDIS.Get( "example-asdf" ).Val()
-	id := c.Params( "id" )
-	extra := c.Query( "extra" )
-	return c.JSON( fiber.Map{
-		"result": true ,
-		"url": "/example/:id" ,
-		"id": id ,
-		"extra": extra ,
-		"test": test ,
-	})
-}
+// func ( s *Server ) ExampleGet( c *fiber.Ctx ) ( error ) {
+// 	server.REDIS.Set( "example-asdf" , "example-asdf" , 0 )
+// 	test := server.REDIS.Get( "example-asdf" ).Val()
+// 	id := c.Params( "id" )
+// 	extra := c.Query( "extra" )
+// 	return c.JSON( fiber.Map{
+// 		"result": true ,
+// 		"url": "/example/:id" ,
+// 		"id": id ,
+// 		"extra": extra ,
+// 		"test": test ,
+// 	})
+// }
 
 // func ( s *Server ) ExamplePost( c *fiber.Ctx ) ( error ) {
 // 	var json_body map[ string ]interface{}
@@ -70,6 +70,6 @@ func ( s *Server ) SetupAdminRoutes() {
 	}
 	admin.Use( s.ValidateAdminMW )
 	admin.Get( "/log/view" , s.GetLogMessages )
-	admin.Get( "/example/:id" , s.ExampleGet )
+	// admin.Get( "/example/:id" , s.ExampleGet )
 	// admin.Post( "/example" , s.ExamplePost )
 }
