@@ -40,8 +40,10 @@ func GenerateNewKeys() {
 	admin_password := encryption.GenerateRandomString( 16 )
 	api_key := encryption.GenerateRandomString( 16 )
 	encryption_key := encryption.GenerateRandomString( 32 )
+	bolt_name := encryption.GenerateRandomString( 6 ) + ".db"
 	bolt_prefix := encryption.GenerateRandomString( 6 )
 	redis_prefix := encryption.GenerateRandomString( 6 )
+	log_name := encryption.GenerateRandomString( 6 ) + ".db"
 	log_key := encryption.GenerateRandomString( 6 )
 	log_encryption_key := encryption.GenerateRandomString( 32 )
 	fmt.Println( "Generated New Keys :" )
@@ -58,14 +60,17 @@ func GenerateNewKeys() {
 	fmt.Printf( "\tCREDS - Encryption Key === %s\n" , encryption_key )
 	fmt.Printf( "\tAdmin Username === %s\n" , admin_username )
 	fmt.Printf( "\tAdmin Password === %s\n" , admin_password )
+	fmt.Printf( "\tLOG - Log Name === %s\n" , log_name )
 	fmt.Printf( "\tLOG - Log Key === %s\n" , log_key )
 	fmt.Printf( "\tLOG - Encryption Key === %s\n" , log_encryption_key )
+	fmt.Printf( "\tBOLT - Name === %s\n" , bolt_name )
 	fmt.Printf( "\tBOLT - Prefix === %s\n" , bolt_prefix )
 	fmt.Printf( "\tREDIS - Prefix === %s\n" , redis_prefix )
 	panic( "Exiting" )
 }
 
-func WriteConfig( config types.Config ) {
+func WriteConfig( config *types.Config ) {
+	fmt.Println( "Writing Config" , CONFIG_PATH )
 	config_file , _ := yaml.Marshal( &config )
 	ioutil.WriteFile( CONFIG_PATH , config_file , 0644 )
 }
@@ -85,12 +90,14 @@ func GenerateNewKeysWrite( config *types.Config ) {
 	x.Creds.APIKey = encryption.GenerateRandomString( 16 )
 	x.Creds.EncryptionKey = encryption.GenerateRandomString( 32 )
 	x.Bolt.Prefix = encryption.GenerateRandomString( 6 )
+	x.Bolt.Path = encryption.GenerateRandomString( 6 ) + ".db"
 	x.Redis.Prefix = encryption.GenerateRandomString( 6 )
 	x.Log.LogKey = encryption.GenerateRandomString( 6 )
+	x.Log.BoltDBPath = encryption.GenerateRandomString( 6 ) + ".db"
 	x.Log.EncryptionKey = encryption.GenerateRandomString( 32 )
 	fmt.Println( x )
 	fmt.Println( CONFIG_PATH )
-	WriteConfig( *x )
+	WriteConfig( x )
 	panic( "Exiting" )
 }
 
@@ -126,6 +133,9 @@ func GetConfig() ( result types.Config ) {
 			panic( "Config File Not Found" )
 		}
 	}
+	CONFIG_PATH , _ = filepath.Abs( CONFIG_PATH )
 	result = ParseConfig( CONFIG_PATH )
+	result.Bolt.Path = filepath.Join( result.SaveFilesPath , result.Bolt.Path )
+	result.Log.BoltDBPath = filepath.Join( result.SaveFilesPath , result.Log.BoltDBPath )
 	return
 }
