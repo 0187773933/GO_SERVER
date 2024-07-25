@@ -49,8 +49,9 @@ type Redis struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 	Password string `yaml:"password"`
-	Number string `yaml:"number"`
+	Number int `yaml:"number"`
 	Prefix string `yaml:"prefix"`
+	Enabled bool `yaml:"enabled"`
 }
 
 type Creds struct {

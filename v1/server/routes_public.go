@@ -14,7 +14,7 @@ import (
 )
 
 func CDNMaxedOut( c *fiber.Ctx ) error {
-	ip_address := c.IP()
+	ip_address := c.IP() 
 	log_message := fmt.Sprintf( "%s === %s === %s === PUBLIC RATE LIMIT REACHED !!!" , ip_address , c.Method() , c.Path() );
 	log.Info( log_message )
 	c.Set( "Content-Type" , "text/html" )
@@ -78,7 +78,6 @@ func ( s *Server ) SetupPublicRoutes() {
 		}
 		admin_logout_url = fmt.Sprintf( "/%s/logout" , s.Config.URLS.AdminPrefix )
 	}
-	fmt.Println( home_url )
 	s.FiberApp.Get( home_url , PublicLimter , s.RenderHomePage )
 	// s.FiberApp.Get( login_url , PublicLimter , s.LoginPage )
 	// s.FiberApp.Post( login_url , PublicLimter , s.Login )

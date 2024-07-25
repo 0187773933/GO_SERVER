@@ -32,8 +32,9 @@ redis:
     host: ""
     port: ""
     password: ""
-    number: ""
+    number: 1
     prefix: e0e2c5
+    enabled: false
 docker:
     name: private-example-server
 git:

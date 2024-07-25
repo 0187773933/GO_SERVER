@@ -6,7 +6,9 @@ import (
 	fs "io/fs"
 	"time"
 	"strings"
+	// "strconv"
 	bolt "github.com/boltdb/bolt"
+	redis "github.com/redis/go-redis/v9"
 	// logrus "github.com/sirupsen/logrus"
 	logger "github.com/0187773933/Logger/v1/logger"
 	types "github.com/0187773933/GO_SERVER/v1/types"
@@ -40,6 +42,7 @@ type Server struct {
 	Config *types.Config `yaml:"config"`
 	Location *time.Location `yaml:"-"`
 	DB *bolt.DB `yaml:"-"`
+	REDIS *redis.Client `yaml:"-"`
 	LOG *logger.Wrapper `yaml:"-"`
 }
 
@@ -97,6 +100,14 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	log = w_log
 	server.LOG = w_log
 	server.DB = db
+	if config.Redis.Enabled == true {
+		server.REDIS = redis.NewClient( &redis.Options{
+			Addr: fmt.Sprintf( "%s:%s" , config.Redis.Host , config.Redis.Port ) ,
+			Password: config.Redis.Password ,
+			DB: config.Redis.Number ,
+		})
+		log.Info( "Redis Connected" )
+	}
 	server.FiberApp.Use( server.LogRequest )
 	server.FiberApp.Use( fiber_favicon.New() )
 	server.FiberApp.Use( fiber_cookie.New( fiber_cookie.Config{
@@ -107,7 +118,6 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 		AllowOrigins: allow_origins_string ,
 		AllowHeaders:  "Origin, Content-Type, Accept, key, k" ,
 	}))
-
 	CDNFilesFS , _ = fs.Sub( CDNFiles , "cdn" )
 	HTMLFilesFS , _ = fs.Sub( HTMLFiles , "html" )
 	ADMIN_HTML_FILE , _ = HTMLFilesFS.Open( "admin.html" )
