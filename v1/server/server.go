@@ -100,14 +100,6 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	log = w_log
 	server.LOG = w_log
 	server.DB = db
-	if config.Redis.Enabled == true {
-		server.REDIS = redis.NewClient( &redis.Options{
-			Addr: fmt.Sprintf( "%s:%s" , config.Redis.Host , config.Redis.Port ) ,
-			Password: config.Redis.Password ,
-			DB: config.Redis.Number ,
-		})
-		log.Info( "Redis Connected" )
-	}
 	server.FiberApp.Use( server.LogRequest )
 	server.FiberApp.Use( fiber_favicon.New() )
 	server.FiberApp.Use( fiber_cookie.New( fiber_cookie.Config{
