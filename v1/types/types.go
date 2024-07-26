@@ -78,3 +78,5 @@ type Config struct {
 	Go Go `yaml:"go"`
 	Log logger_types.ConfigFile `yaml:"log"`
 }
+
+type ConfigGeneric map[string]interface{}

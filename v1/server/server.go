@@ -40,6 +40,7 @@ var LOGIN_HTML_FILE_SIZE int
 type Server struct {
 	FiberApp *fiber.App `yaml:"fiber_app"`
 	Config *types.Config `yaml:"config"`
+	ConfigGeneric types.ConfigGeneric `yaml:"config_generic"`
 	Location *time.Location `yaml:"-"`
 	DB *bolt.DB `yaml:"-"`
 	REDIS *redis.Client `yaml:"-"`
@@ -97,6 +98,7 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	server.Location , _ = time.LoadLocation( config.TimeZone )
 	server.FiberApp = fiber.New()
 	server.Config = config
+	server.ConfigGeneric = utils.ParseConfigGeneric()
 	log = w_log
 	server.LOG = w_log
 	server.DB = db
@@ -123,8 +125,7 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	LOGIN_HTML_FILE_INFO , _ := LOGIN_HTML_FILE.Stat()
 	ADMIN_HTML_FILE_SIZE = int( ADMIN_HTML_FILE_INFO.Size() )
 	HOME_HTML_FILE_SIZE = int( HOME_HTML_FILE_INFO.Size() )
-	LOGIN_HTML_FILE_SIZE = int( LOGIN_HTML_FILE_INFO.Size() )
-
+	LOGIN_HTML_FILE_SIZE = int( LOGIN_HTML_FILE_INFO.Size() )	
 	server.SetupPublicRoutes()
 	server.SetupAdminRoutes()
 	return

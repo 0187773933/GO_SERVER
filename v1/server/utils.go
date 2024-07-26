@@ -7,6 +7,7 @@ import (
 	// "time"
 	// "strings"
 	"encoding/json"
+	types "github.com/0187773933/GO_SERVER/v1/types"
 	bolt "github.com/boltdb/bolt"
 	fiber "github.com/gofiber/fiber/v2"
 	fasthttpadaptor "github.com/valyala/fasthttp/fasthttpadaptor"
@@ -20,6 +21,24 @@ func ( s *Server ) StaticHandler( prefix string , fsys fs.FS ) fiber.Handler {
 		request_handler( c.Context() )
 		return nil
 	}
+}
+
+func ( s *Server ) ConfigGenericGet( keys ...interface{} ) ( result interface{} ) {
+	var current interface{} = s.ConfigGeneric
+	for _ , key := range keys {
+		currentMap, ok := current.( types.ConfigGeneric )
+		if !ok {
+			log.Errorf( "expected map[interface{}]interface{} at key %v but got %T" , key , current )
+			return nil
+		}
+		current , ok = currentMap[ key.( string ) ]
+		if !ok {
+			log.Errorf( "key %v not found in map" , key )
+			return nil
+		}
+	}
+	result = current
+	return
 }
 
 func ( s *Server ) Set( bucket_name string , key string , value string ) {

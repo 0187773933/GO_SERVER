@@ -124,6 +124,12 @@ func ParseConfig( file_path string ) ( result types.Config ) {
 	return
 }
 
+func ParseConfigGeneric() ( result types.ConfigGeneric ) {
+	config_file , _ := ioutil.ReadFile( CONFIG_PATH )
+    yaml.Unmarshal( []byte( config_file ) , &result )
+	return
+}
+
 func GetConfig() ( result types.Config ) {
 	if len( os.Args ) > 1 {
 		CONFIG_PATH , _ = filepath.Abs( os.Args[ 1 ] )
