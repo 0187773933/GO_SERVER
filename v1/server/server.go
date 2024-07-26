@@ -45,6 +45,7 @@ type Server struct {
 	DB *bolt.DB `yaml:"-"`
 	REDIS *redis.Client `yaml:"-"`
 	LOG *logger.Wrapper `yaml:"-"`
+	STORE map[string]string `yaml:"-"`
 }
 
 var log *logger.Wrapper
@@ -102,6 +103,7 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	log = w_log
 	server.LOG = w_log
 	server.DB = db
+	server.STORE = make( map[string]string )
 	server.FiberApp.Use( server.LogRequest )
 	server.FiberApp.Use( fiber_favicon.New() )
 	server.FiberApp.Use( fiber_cookie.New( fiber_cookie.Config{
@@ -125,7 +127,7 @@ func New( config *types.Config , w_log *logger.Wrapper , db *bolt.DB ) ( server 
 	LOGIN_HTML_FILE_INFO , _ := LOGIN_HTML_FILE.Stat()
 	ADMIN_HTML_FILE_SIZE = int( ADMIN_HTML_FILE_INFO.Size() )
 	HOME_HTML_FILE_SIZE = int( HOME_HTML_FILE_INFO.Size() )
-	LOGIN_HTML_FILE_SIZE = int( LOGIN_HTML_FILE_INFO.Size() )	
+	LOGIN_HTML_FILE_SIZE = int( LOGIN_HTML_FILE_INFO.Size() )
 	server.SetupPublicRoutes()
 	server.SetupAdminRoutes()
 	return
