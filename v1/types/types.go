@@ -54,11 +54,17 @@ type Redis struct {
 	Enabled bool `yaml:"enabled"`
 }
 
+type KyberKeyPair struct {
+	Private string `yaml:"private"`
+	Public string `yaml:"public"`
+}
+
 type Creds struct {
 	APIKey         string `yaml:"api_key"`
 	AdminUsername  string `yaml:"admin_username"`
 	AdminPassword  string `yaml:"admin_password"`
 	EncryptionKey  string `yaml:"encryption_key"`
+	Kyber          KyberKeyPair `yaml:"kyber"`
 	OpenAIKey      string `yaml:"openai_key"`
 }
 
@@ -77,6 +83,8 @@ type Config struct {
 	Git Git `yaml:"git"`
 	Go Go `yaml:"go"`
 	Log logger_types.ConfigFile `yaml:"log"`
+	Misc map[string]interface{} `yaml:"misc"`
+	MiscMap map[string]string `yaml:"misc_map"`
 }
 
 type ConfigGeneric map[string]interface{}

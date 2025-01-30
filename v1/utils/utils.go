@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"net"
+	hex "encoding/hex"
 	"encoding/base64"
 	filepath "path/filepath"
 	yaml "gopkg.in/yaml.v3"
@@ -46,6 +47,9 @@ func GenerateNewKeys() {
 	log_name := encryption.GenerateRandomString( 6 ) + ".db"
 	log_key := encryption.GenerateRandomString( 6 )
 	log_encryption_key := encryption.GenerateRandomString( 32 )
+	kyber_private , kyber_public := encryption.KyberGenerateKeyPair()
+	kyber_private_string := hex.EncodeToString( kyber_private[ : ] )
+	kyber_public_string := hex.EncodeToString( kyber_public[ : ] )
 	fmt.Println( "Generated New Keys :" )
 	fmt.Printf( "\tURL - Admin Login === %s\n" , admin_login_url )
 	fmt.Printf( "\tURL - Admin Prefix === %s\n" , admin_prefix )
@@ -66,6 +70,8 @@ func GenerateNewKeys() {
 	fmt.Printf( "\tBOLT - Name === %s\n" , bolt_name )
 	fmt.Printf( "\tBOLT - Prefix === %s\n" , bolt_prefix )
 	fmt.Printf( "\tREDIS - Prefix === %s\n" , redis_prefix )
+	fmt.Printf( "\tKYBER - Private Key === %s\n" , kyber_private_string )
+	fmt.Printf( "\tKYBER - Public Key === %s\n" , kyber_public_string )
 	panic( "Exiting" )
 }
 
@@ -89,6 +95,11 @@ func GenerateNewKeysWrite( config *types.Config ) {
 	x.Creds.AdminPassword = encryption.GenerateRandomString( 16 )
 	x.Creds.APIKey = encryption.GenerateRandomString( 16 )
 	x.Creds.EncryptionKey = encryption.GenerateRandomString( 32 )
+	kyber_private , kyber_public := encryption.KyberGenerateKeyPair()
+	kyber_private_string := hex.EncodeToString( kyber_private[ : ] )
+	kyber_public_string := hex.EncodeToString( kyber_public[ : ] )
+	x.Creds.Kyber.Private = kyber_private_string
+	x.Creds.Kyber.Public = kyber_public_string
 	x.Bolt.Prefix = encryption.GenerateRandomString( 6 )
 	x.Bolt.Path = encryption.GenerateRandomString( 6 ) + ".db"
 	x.Redis.Prefix = encryption.GenerateRandomString( 6 )

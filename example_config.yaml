@@ -21,6 +21,9 @@ creds:
     admin_username: 469923c96826c9a7
     admin_password: 5787937209d4e82f
     encryption_key: 715b9ff14c766cbe5510e6b09fcf75d8
+    kyber:
+        private: ""
+        public: ""
     openai_key: ""
 time_zone: ""
 allow_origins: []
