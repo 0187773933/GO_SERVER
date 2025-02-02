@@ -46,6 +46,7 @@ type Server struct {
 	REDIS *redis.Client `yaml:"-"`
 	LOG *logger.Wrapper `yaml:"-"`
 	STORE map[string]string `yaml:"-"`
+	EMBEDED fs.FS `yaml:"-"`
 }
 
 var log *logger.Wrapper
