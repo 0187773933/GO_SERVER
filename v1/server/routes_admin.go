@@ -20,6 +20,7 @@ func ( s *Server ) GetLogMessages( c *fiber.Ctx ) ( error ) {
 	count_int , _ := strconv.Atoi( count )
 	if count_int == 0 {
 		count_int = -1
+		count = "-1"
 	}
 	log.Debug( fmt.Sprintf( "Count === %d" , count_int ) )
 	messages := log.GetMessages( count_int )
