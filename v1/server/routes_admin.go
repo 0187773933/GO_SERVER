@@ -59,7 +59,7 @@ func ( s *Server ) GetLogMessages( c *fiber.Ctx ) ( error ) {
 
 func ( s *Server ) SetupAdminRoutes() {
 	cdn_group := s.FiberApp.Group( "/cdn" )
-	cdn_group.Use( CDNLimter )
+	// cdn_group.Use( CDNLimter )
 	cdn_group.Use( s.ValidateAdminMW )
 	// s.FiberApp.Static( "/cdn" , cdn_fs )
 	cdn_group.Use( "/" , s.StaticHandler( "/cdn" , CDNFilesFS ) )

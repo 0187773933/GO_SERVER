@@ -47,6 +47,7 @@ type Server struct {
 	LOG *logger.Wrapper `yaml:"-"`
 	STORE map[string]string `yaml:"-"`
 	EMBEDED fs.FS `yaml:"-"`
+	EMBEDED_TMP fs.FS `yaml:"-"`
 }
 
 var log *logger.Wrapper
